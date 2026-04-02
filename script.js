@@ -1,5 +1,7 @@
 console.log("JS Loaded");
-const API = "https://todo-app-03jg.onrender.com/todos";
+
+// Change this to your deployed backend URL
+const API = "https://todo-app-03jg.onrender.com/todos"; // ✅ LOCAL BACKEND
 
 const input = document.getElementById("input");
 const list = document.getElementById("list");
@@ -17,11 +19,11 @@ async function loadTodos() {
 
     const editButton = document.createElement("button");
     editButton.textContent = "✏️";
-    editButton.addEventListener("click", () => editTodo(todo.id, todo.text));
+    editButton.addEventListener("click", () => editTodo(todo._id, todo.text));
 
     const deleteButton = document.createElement("button");
     deleteButton.textContent = "❌";
-    deleteButton.addEventListener("click", () => deleteTodo(todo.id));
+    deleteButton.addEventListener("click", () => deleteTodo(todo._id));
 
     li.appendChild(editButton);
     li.appendChild(deleteButton);
@@ -51,13 +53,14 @@ async function addTodo() {
 
 // Delete todo
 async function deleteTodo(id) {
-  await fetch(API + "/" + id, {
+  await fetch(`${API}/${id}`, {
     method: "DELETE"
   });
 
   loadTodos();
 }
 
+// Edit todo
 async function editTodo(id, oldText) {
   const newText = prompt("Edit todo:", oldText);
 
@@ -67,7 +70,7 @@ async function editTodo(id, oldText) {
     return;
   }
 
-  await fetch(API + "/" + id, {
+  await fetch(`${API}/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json"
