@@ -1,5 +1,5 @@
 console.log("JS Loaded");
-const API = "http://localhost:5000/todos";
+const API = "https://todo-app-03jg.onrender.com/todos";
 
 const input = document.getElementById("input");
 const list = document.getElementById("list");
