@@ -1,5 +1,3 @@
-require("dotenv").config();
-
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
@@ -8,10 +6,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// ✅ Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI)
+// ✅ Connect to MongoDB with connection pooling
+mongoose.connect(process.env.MONGO_URI, {
+  maxPoolSize: 10,
+  minPoolSize: 5,
+  socketTimeoutMS: 45000,
+})
   .then(() => console.log("MongoDB connected ✅"))
-  .catch(err => console.log(err));
+  .catch(err => console.log("MongoDB Error:", err));
 
 // ✅ Schema
 const TodoSchema = new mongoose.Schema({
@@ -39,7 +41,7 @@ app.post("/todos", async (req, res) => {
 // DELETE todo
 app.delete("/todos/:id", async (req, res) => {
   await Todo.findByIdAndDelete(req.params.id);
-  res.send("Deleted");
+  res.json({ message: "Deleted" });
 });
 
 // UPDATE todo
@@ -48,7 +50,7 @@ app.put("/todos/:id", async (req, res) => {
     text: req.body.text
   });
 
-  res.send("Updated");
+  res.json({ message: "Updated" });
 });
 
 // ROOT route
