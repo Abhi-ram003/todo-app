@@ -39,5 +39,9 @@ app.put("/todos/:id", (req, res) => {
   res.send("Updated");
 });
 
+app.get("/", (req, res) => {
+  res.send("Todo API is running 🚀");
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log("Server running on port " + PORT));
